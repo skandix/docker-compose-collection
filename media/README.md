@@ -1,23 +1,23 @@
 # Media
-* usenet
-    * watchtower
-    * ombi
-    * sonarr
-    * radarr
-    * nzbget
-    * plex
-    * plexpy
-    * nzbhydra
-* torrent
-    * deluge
-        * jackett
-        * deluge
-    * rflood - fancy ui for rtorrent
-        * rflood + rtorrent
-        * jackett
-    * transmission
-        * transmission + openvpn
-        * jackett
-* radio
-    * icecast
-    * liquidsoap
+* Usenet
+    * [Old-Watchtower](https://hub.docker.com/r/v2tec/watchtower/)
+    * [Ombi](https://ombi.io/)
+    * [Sonarr](https://sonarr.tv/)
+    * [Radarr](https://radarr.video/)
+    * [Nzbget](https://nzbget.net/)
+    * [Plex](https://www.plex.tv/)
+    * [Tautulli](https://tautulli.com/)
+    * [Nzbhydra2](https://github.com/theotherp/nzbhydra2)
+* Torrent
+    * Deluge
+        * [Deluge](https://deluge-torrent.org/)
+        * [Jackett](https://github.com/Jackett/Jackett)
+    * rFlood
+        * [Rflood](https://github.com/Flood-UI/flood)
+        * [Jackett](https://github.com/Jackett/Jackett)
+    * Transmission
+        * [Transmission](https://transmissionbt.com/)
+        * [Jackett](https://github.com/Jackett/Jackett)
+* Radio
+    * [Icecast](http://icecast.org/)
+    * [Liquidsoap](https://www.liquidsoap.info/)

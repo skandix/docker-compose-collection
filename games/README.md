@@ -1,3 +1,4 @@
 # games
-* spigot
-* ...
+* Spigot
+    * [Spigot](https://www.spigotmc.org/)
+

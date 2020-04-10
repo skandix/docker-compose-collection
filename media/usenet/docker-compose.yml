@@ -1,0 +1,144 @@
+version: '3'
+
+services:
+  watchtower:
+    image: v2tec/watchtower:latest
+    command: --cleanup --label-enable --schedule="0 2 * * *"
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  nzbget:
+    image: linuxserver/nzbget:latest
+    container_name: nzbget
+    hostname: nzbget
+    ports:
+      - "6789:6789"
+    volumes:
+      - ${CONFIG}/nzbget:/config
+      - ${DOWNLOAD}:/downloads/
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    hostname: sonarr
+    ports:
+      - "8989:8989"
+    volumes:
+      - ${CONFIG}/sonarr:/config
+      - ${DOWNLOAD}:/downloads
+      - ${MEDIA}/TV:/tv
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    hostname: radarr
+    ports:
+      - "7878:7878"
+    volumes:
+      - ${CONFIG}/radarr:/config
+      - ${DOWNLOAD}:/downloads
+      - ${MEDIA}/Movies:/movies
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  nzbhydra:
+    image: linuxserver/hydra2:latest
+    container_name: nzbhydra
+    hostname: nzbhydra
+    ports:
+      - "5076:5076"
+    volumes:
+      - ${CONFIG}/nzbhydra2:/config
+      - ${DOWNLOAD}/completed:/downloads
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    hostname: plex
+    network_mode: "host"
+    # Using host as network_mode is  the way to go if you are experience problem when exposing it out to the www :)
+    #ports:
+          # - "32400:32400/tcp"
+          # - "32400:32400/udp"
+          # - "32469:32469/tcp"
+          # - "32469:32469/udp"
+          # - "1900:1900/udp"
+          # - "5353:5353/udp"
+    volumes:
+      - ${CONFIG}/plex:/config
+      - ${MEDIA}/TV:/media/tv
+      - ${MEDIA}/Movies:/media/movies
+      - ${CACHE}:/transcode
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - VERSION=latest
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  plexpy:
+    image: linuxserver/tautulli:latest
+    container_name: tautulli
+    hostname: tautulli
+    ports:
+      - "8181:8181"
+    volumes:
+      - ${CONFIG}/plexpy:/config
+      - ${CONFIG}/plex/Library/Application Support/Plex Media Server/Logs:/logs:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  ombi:
+    image: linuxserver/ombi
+    container_name: ombi
+    hostname: ombi
+    ports:
+      - "3579:3579"
+    volumes:
+      - ${CONFIG}/ombi:/config
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure

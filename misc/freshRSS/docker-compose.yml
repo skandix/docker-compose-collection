@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgres
+    hostname: postgres
+    ports:
+    - "5432:5432"
+    volumes:
+    - ${STORAGE}/postgresql:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
+    - POSTGRES_DB
+    - PGID
+    - PUID
+    - TZ
+    restart: unless-stopped
+
+  freshrss:
+    image: linuxserver/freshrss
+    container_name: freshrss
+    hostname: freshrss
+    ports:
+    - "8383:80"
+    volumes:
+      - ${STORAGE}/freshrss:/var/www/FreshRSS/data
+    environment:
+    - PGID
+    - PUID
+    - TZ
+    restart: on-failure

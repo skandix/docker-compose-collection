@@ -1,0 +1,30 @@
+version: "3"
+services:
+  radio_icecast:
+    container_name: radio_icecast
+    environment:
+      - ICECAST_ADMIN_PASSWORD
+      - ICECAST_PASSWORD
+      - ICECAST_RELAY_PASSWORD
+      - ICECAST_SOURCE_PASSWORD
+    image: moul/icecast:latest
+    ports:
+      - 8000:8000
+    volumes:
+      - ${LOCALTIME}:/etc/localtime:ro
+  radio_liquidsoap:
+    container_name: radio_liquidsoap
+    environment:
+      - ICECAST_HOST
+      - ICECAST_PORT
+      - ICECAST_SOURCE_PASSWORD
+    command: liquidsoap -v --debug /liquidsoap/liquidsoap.liq
+    image: moul/liquidsoap:latest
+    ports:
+      - 8800:8800
+    user: liquidsoap
+    volumes:
+      - ${STORAGE}:/liquidsoap/liquidsoap.liq
+      - ${MUSIC}:/data
+      - ${LOCALTIME}:/etc/localtime:ro
+

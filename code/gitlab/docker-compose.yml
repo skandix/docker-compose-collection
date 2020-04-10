@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+    gitlab:
+        container_name: gitlab
+        image: gitlab/gitlab-ce:latest
+        restart: always
+        #network_mode: "host"
+        volumes:
+            - ${CONFIGS}:/etc/gitlab
+            - ${LOGS}:/var/log/gitlab
+            - ${DATA}:/var/opt/gitlab
+        ports:
+          - '4080:80'
+          - '4443:443'
+          - '9090:4020'
+          - '2224:22'
+        environment:
+          GITLAB_OMNIBUS_CONFIG: |
+            external_url '${EXTERNAL_URL}'
+            gitlab_rails['gitlab_shell_ssh_port'] = 2224
+
+    gitlab-runner:
+        container_name: gitlab-runner
+        image: gitlab/gitlab-runner:latest
+        restart: always
+        volumes:
+            - ${CONFIGS}:/etc/gitlab-runner
+            - ${DOCKERSOCK}:/var/run/docker.sock

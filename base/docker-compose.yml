@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  watchtower:
+    image: v2tec/watchtower:latest
+    command: --cleanup --label-enable --schedule="0 2 * * *"
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  service_1:
+    image: <dummy>/service_1:latest
+    container_name: service_1
+    hostname: service_1
+    ports:
+      - "6789:6789"
+    volumes:
+      - ${CONFIG}/service_1:/config
+      - ${DOWNLOAD}:/downloads/
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure

@@ -1,0 +1,29 @@
+version: '3'
+services:
+  wiki_mysql:
+    container_name: wiki_mysql
+    image: mysql:5.7.21
+    environment:
+    - MYSQL_ROOT_PASSWORD
+    - MYSQL_DATABASE
+    - MYSQL_USER
+    - MYSQL_PASSWORD
+    volumes:
+    - ${STORAGE}/mysql:/var/lib/mysql
+
+  wiki_bookstack:
+    container_name: wiki_bookstack
+    image: solidnerd/bookstack:latest
+    depends_on:
+    - mysql
+    environment:
+    - DB_HOST
+    - DB_DATABASE
+    - DB_USERNAME
+    - DB_PASSWORD
+    volumes:
+    - ${STORAGE}/Bookstack/uploads:/var/www/bookstack/public/uploads
+    - ${STORAGE}/Bookstack/storage:/var/www/bookstack/public/storage
+    ports:
+    - "8888:80"
+

@@ -1,21 +1,22 @@
 # docker-compose-collection
-My collection of docker-compose files i've made and that doesn't contain any sensetive information :joy: 
+My collection of docker-compose files i've made and that doesn't contain any sensetive information hopefully :joy:
 
+# Overview
+* [Code](./code/README.md)
+* [Games](./games/README.md)
+* [Media](./media/README.md)
+* [Mgmt](./mgmt/README.md)
+* [Misc](./misc/README.md)
 
+# Install
+There is already great guides out there on how to install both Docker and Docker-compose :)
+* [Docker](https://docs.docker.com/engine/install/)
+* [Docker-Compose](https://docs.docker.com/compose/install/#install-compose-on-linux-systems)
 
-Cleaning up some of the files before publishing them here :)
-
-With each docker-compose.yml, there will follow a example.env, to use this is to fill in your own details, and then rename it
-from ```example.env```` to ```.env```
-
-````bash
-docker-compose up -d --build
-```
-
-# TODO
-point to install guide of docker and docker-compose
-add in .yml files
-cleanup everything
-get some sleep
-make sure I don't push any pws to git, which is one hell of stupid idea.
-add a quick how to use all files.
+## How to use?!
+1. Find the docker-compose.yml you want to use.
+2. Copy it to a safe place ;)
+3. rename ``example.env`` to ``.env``
+4. edit the ``.env`` to fit your setup
+5. run ``docker-compose up -d```to bring up all containers as described in docker-compose.yml
+6. Profit ?!?!

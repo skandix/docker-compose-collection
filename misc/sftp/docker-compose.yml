@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  sftp-media:
+    image: atmoz/sftp
+    container_name: sftp-media
+    hostname: sftp-media
+    ports:
+      - "4200:22"
+    volumes:
+      - ${TV}:/home/${USERNAME}/upload/tv
+      - ${MOVIES}:/home/${USERNAME}/upload/movies
+      - ${MUSIC}:/home/${USERNAME}/upload/music
+      - ${MISC}:/home/${USERNAME}/upload/misc
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    command: ${USERNAME}:${PASSWD}:${UID}
+    restart: on-failure

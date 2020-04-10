@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  spigot:
+    image: ashdev/minecraft-spigot:latest
+    container_name: ${SERVER_NAME}
+    hostname: ${SERVER_NAME}
+    ports:
+      - "25565:25565"
+      - "8123:8123"
+    volumes:
+      - ${STORAGE}/${SERVER_NAME}:/minecraft
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - EULA
+      - OPS
+      - OPPERM
+      - MODE
+      - MOTD
+      - PVP
+      - LEVEL
+      - VDIST
+      - NETHER
+      - FLY
+      - MAXBHEIGHT
+      - NPCS
+      - ANIMALS
+      - ONLINE
+      - RPACK
+      - DIFFICULTY
+      - CMDBLOCK
+      - MAXPLAYERS
+      - MONSTERS
+      - STRUCTURES
+      - SPAWNPROTECTION
+      - MAX_WORLD_SIZE
+      - JVM_OPTS
+      - DYNMAP
+    restart: on-failure
