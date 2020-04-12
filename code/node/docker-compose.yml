@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  service_nginx:
+    image: nginx
+    container_name: service_nginx
+    hostname: service_nginx
+    network_mode: host
+    volumes:
+      - ${CONFIG}/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: on-failure
+  service_node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service_node
+    hostname: service_node
+    ports: # feel free to edit these to fit your project
+      - 3001:3001
+      - 8080:8080
+    volumes:
+      - ${CONFIG}/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    depends_on:
+      - service_nginx
+    links:
+      - service_nginx
+    restart: on-failure
+

@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  service_mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    container_name: service_mssql
+    hostname: service_mssql
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+      - ${DATABASE}:/var/opt/mssql/db_export.bak
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - ACCEPT_EULA
+      - MSSQL_SA_PASSWORD
+      - MSSQL_PID
+      - MSSQL_TCP_PORT
+    restart: on-failure
+
+volumes:
+  sqldata:
