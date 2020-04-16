@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  mqtt_watchtower:
+    image: v2tec/watchtower:latest
+    command: --cleanup --label-enable --schedule="0 2 * * *"
+    container_name: mqtt_watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+  mqtt_mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt_mosquitto
+    hostname: mqtt_mosquitto
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ${CONFIG}/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ${DATA}:/mosquitto/data
+      - ${LOG}:/mosquitto/log
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
