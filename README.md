@@ -1,5 +1,5 @@
 # docker-compose-collection
-My collection of docker-compose files i've made and that doesn't contain any sensetive information hopefully :joy:
+My colletion of docker-compose files i've made myself and that HOPEFULLY doesnt contain any senseitive information... :joy:
 
 # Overview
 * [Code](./code/)
