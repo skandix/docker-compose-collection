@@ -12,7 +12,7 @@ services:
     restart: on-failure
 
   nzbget:
-    image: linuxserver/nzbget:latest
+    image: ghcr.io/linuxserver/nzbget
     container_name: nzbget
     hostname: nzbget
     ports:
@@ -29,7 +29,7 @@ services:
     restart: on-failure
 
   sonarr:
-    image: linuxserver/sonarr:latest
+    image: ghcr.io/linuxserver/sonarr
     container_name: sonarr
     hostname: sonarr
     ports:
@@ -47,7 +47,7 @@ services:
     restart: on-failure
 
   radarr:
-    image: linuxserver/radarr:latest
+    image: ghcr.io/linuxserver/radarr
     container_name: radarr
     hostname: radarr
     ports:
@@ -65,14 +65,35 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
+  lidarr:
+    image: ghcr.io/linuxserver/lidarr
+    container_name: lidarr
+    hostname: lidarr
+    ports:
+      - "8686:8686"
+    volumes:
+      - ${CONFIG}/lidarr:/config
+      - ${DOWNLOAD}/completed/SkandixMusic:/downloads
+      - ${MEDIA}/Music:/music
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    restart: on-failure
+
+
   nzbhydra:
-    image: linuxserver/hydra2:latest
+      #image: ghcr.io/linuxserver/nzbhydra2
+    image: linuxserver/hydra:latest
     container_name: nzbhydra
     hostname: nzbhydra
     ports:
       - "5076:5076"
+      - "5075:5075"
     volumes:
-      - ${CONFIG}/nzbhydra2:/config
+      - ${CONFIG}/nzbhydra:/config
       - ${DOWNLOAD}/completed:/downloads
     environment:
       - PGID
@@ -83,11 +104,10 @@ services:
     restart: on-failure
 
   plex:
-    image: linuxserver/plex
+    image: ghcr.io/linuxserver/plex
     container_name: plex
     hostname: plex
     network_mode: "host"
-    # Using host as network_mode is  the way to go if you are experience problem when exposing it out to the www :)
     #ports:
           # - "32400:32400/tcp"
           # - "32400:32400/udp"
@@ -97,8 +117,10 @@ services:
           # - "5353:5353/udp"
     volumes:
       - ${CONFIG}/plex:/config
-      - ${MEDIA}/TV:/media/tv
+      - ${MEDIA}/TV:/media/tv 
       - ${MEDIA}/Movies:/media/movies
+      - ${MEDIA}/Music:/media/music
+      - ${MEDIA}/YouTube:/media/youtube
       - ${CACHE}:/transcode
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -110,8 +132,26 @@ services:
       com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
+    # jellyfin:
+    #    image: jellyfin/jellyfin
+    #container_name: jellyfin
+    #hostname: jellyfin
+    #network_mode: "host"
+    #environment:
+    #  - PGID
+    #  - PUID
+    #  - TZ
+    #volumes:
+    #  - ${CONFIG}/jellyfin:/config
+    #  - ${MEDIA}/TV:/media/tv
+    #  - ${MEDIA}/Movies:/media/movies
+    #  - ${CACHE}:/cache
+    #labels:
+    #  com.centurylinklabs.watchtower.enable: "true"
+    #restart: on-failure
+
   plexpy:
-    image: linuxserver/tautulli:latest
+    image: ghcr.io/linuxserver/tautulli
     container_name: tautulli
     hostname: tautulli
     ports:
@@ -128,7 +168,7 @@ services:
     restart: on-failure
 
   ombi:
-    image: linuxserver/ombi
+    image: ghcr.io/linuxserver/ombi
     container_name: ombi
     hostname: ombi
     ports:
