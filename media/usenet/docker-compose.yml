@@ -2,13 +2,19 @@ version: '3'
 
 services:
   watchtower:
-    image: v2tec/watchtower:latest
-    command: --cleanup --label-enable --schedule="0 2 * * *"
+    image: containrrr/watchtower
     container_name: watchtower
+    hostname: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - WATCHTOWER_NOTIFICATIONS
+      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL
+      - WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER
+    command: --interval 720 --cleanup --rolling-restart
     restart: on-failure
 
   nzbget:
@@ -24,8 +30,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   sonarr:
@@ -42,8 +46,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   radarr:
@@ -61,8 +63,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   lidarr:
@@ -79,8 +79,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
 
@@ -99,8 +97,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   plex:
@@ -128,8 +124,6 @@ services:
       - PUID
       - TZ
       - VERSION=latest
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
     # jellyfin:
@@ -163,8 +157,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   ombi:
@@ -179,6 +171,4 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
