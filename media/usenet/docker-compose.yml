@@ -2,14 +2,17 @@ version: '3'
 
 services:
   watchtower:
-    image: v2tec/watchtower:latest
-    command: --cleanup --label-enable --schedule="0 2 * * *"
-    container_name: watchtower
+    image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
-    restart: on-failure
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - WATCHTOWER_NOTIFICATIONS=slack
+      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL="https://discord.com/api/webhooks/778530018359902228/FgNG1OlDjRQnm366R_g5jEdwvNAfda4JPC-w7LVaFJFGRYH2wzWArFfPqtBj5bmse8UG/slack" 
+      - WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER=watchtowerrr
+    command: --interval 720 --cleanup --rolling-restart
 
   nzbget:
     image: linuxserver/nzbget:latest
@@ -24,8 +27,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   sonarr:
@@ -42,8 +43,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   radarr:
@@ -61,8 +60,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   nzbhydra:
@@ -78,8 +75,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   plex:
@@ -106,8 +101,6 @@ services:
       - PUID
       - TZ
       - VERSION=latest
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   plexpy:
@@ -123,8 +116,6 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
 
   ombi:
@@ -139,6 +130,4 @@ services:
       - PGID
       - PUID
       - TZ
-    labels:
-      com.centurylinklabs.watchtower.enable: "true"
     restart: on-failure
