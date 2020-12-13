@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+   komga:
+    image: gotson/komga
+    container_name: komga
+    hostname: komga
+    ports:
+      - "31289:8080"
+    volumes:
+      - type: bind
+        source: ${CONFIG}/komga
+        target: /config
+      - type: bind
+        source: ${MEDIA}/Books
+        target: /books
+      - type: bind
+        source: /etc/timezone
+        target: /etc/timezone
+        read_only: true
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    user: "1000:1000"
+    restart: on-failure
