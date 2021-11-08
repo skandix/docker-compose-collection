@@ -11,11 +11,8 @@ services:
       - PGID
       - PUID
       - TZ
-      - WATCHTOWER_NOTIFICATIONS
-      - WATCHTOWER_NOTIFICATION_SLACK_HOOK_URL
-      - WATCHTOWER_NOTIFICATION_SLACK_IDENTIFIER
     command: --interval 720 --cleanup --rolling-restart
-    restart: on-failure
+    restart: always
 
   nzbget:
     image: ghcr.io/linuxserver/nzbget
@@ -30,7 +27,7 @@ services:
       - PGID
       - PUID
       - TZ
-    restart: on-failure
+    restart: always
 
   sonarr:
     image: ghcr.io/linuxserver/sonarr
@@ -46,7 +43,7 @@ services:
       - PGID
       - PUID
       - TZ
-    restart: on-failure
+    restart: always
 
   radarr:
     image: ghcr.io/linuxserver/radarr
@@ -63,59 +60,21 @@ services:
       - PGID
       - PUID
       - TZ
-    restart: on-failure
-
-  lidarr:
-    image: ghcr.io/linuxserver/lidarr
-    container_name: lidarr
-    hostname: lidarr
-    ports:
-      - "8686:8686"
-    volumes:
-      - ${CONFIG}/lidarr:/config
-      - ${DOWNLOAD}/completed/SkandixMusic:/downloads
-      - ${MEDIA}/Music:/music
-    environment:
-      - PGID
-      - PUID
-      - TZ
-    restart: on-failure
-
-
-  nzbhydra:
-      #image: ghcr.io/linuxserver/nzbhydra2
-    image: linuxserver/hydra:latest
-    container_name: nzbhydra
-    hostname: nzbhydra
-    ports:
-      - "5076:5076"
-      - "5075:5075"
-    volumes:
-      - ${CONFIG}/nzbhydra:/config
-      - ${DOWNLOAD}/completed:/downloads
-    environment:
-      - PGID
-      - PUID
-      - TZ
-    restart: on-failure
+    restart: always
 
   plex:
     image: ghcr.io/linuxserver/plex
     container_name: plex
     hostname: plex
-    network_mode: "host"
-    #ports:
-          # - "32400:32400/tcp"
-          # - "32400:32400/udp"
-          # - "32469:32469/tcp"
-          # - "32469:32469/udp"
-          # - "1900:1900/udp"
-          # - "5353:5353/udp"
+    #network_mode: "host"
+    ports:
+      - "32401:32400/tcp"
     volumes:
       - ${CONFIG}/plex:/config
-      - ${MEDIA}/TV:/media/tv 
+      - ${MEDIA}/TV:/media/tv
       - ${MEDIA}/Movies:/media/movies
       - ${MEDIA}/Music:/media/music
+      - ${MEDIA}/Audiobooks:/media/audiobooks
       - ${MEDIA}/YouTube:/media/youtube
       - ${CACHE}:/transcode
       - /etc/localtime:/etc/localtime:ro
@@ -124,25 +83,29 @@ services:
       - PUID
       - TZ
       - VERSION=latest
-    restart: on-failure
+    restart: always
 
-    # jellyfin:
-    #    image: jellyfin/jellyfin
-    #container_name: jellyfin
-    #hostname: jellyfin
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    hostname: jellyfin
     #network_mode: "host"
-    #environment:
-    #  - PGID
-    #  - PUID
-    #  - TZ
-    #volumes:
-    #  - ${CONFIG}/jellyfin:/config
-    #  - ${MEDIA}/TV:/media/tv
-    #  - ${MEDIA}/Movies:/media/movies
-    #  - ${CACHE}:/cache
-    #labels:
-    #  com.centurylinklabs.watchtower.enable: "true"
-    #restart: on-failure
+    ports:
+      - 33010:8096
+    volumes:
+      - ${CONFIG}/jelly:/config
+      - ${MEDIA}/TV:/media/tv
+      - ${MEDIA}/Movies:/media/movies
+      - ${MEDIA}/Music:/media/music
+      - ${MEDIA}/Audiobooks:/media/audiobooks
+      - ${MEDIA}/YouTube:/media/youtube
+      - ${CACHE}:/cache
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
 
   plexpy:
     image: ghcr.io/linuxserver/tautulli
@@ -157,18 +120,18 @@ services:
       - PGID
       - PUID
       - TZ
-    restart: on-failure
+    restart: always
 
   ombi:
     image: ghcr.io/linuxserver/ombi
     container_name: ombi
     hostname: ombi
     ports:
-      - "3579:3579"
+      - "27016:3579"
     volumes:
       - ${CONFIG}/ombi:/config
     environment:
       - PGID
       - PUID
       - TZ
-    restart: on-failure
+    restart: always
