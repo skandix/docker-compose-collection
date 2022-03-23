@@ -2,18 +2,10 @@ version: '3'
 
 services:
   watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    hostname: watchtower
+    image: containrrr/watchtower 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - PGID
-      - PUID
-      - TZ
-    command: --interval 720 --cleanup --rolling-restart
-    restart: always
-
+  
   nzbget:
     image: ghcr.io/linuxserver/nzbget
     container_name: nzbget
@@ -68,15 +60,11 @@ services:
     hostname: plex
     #network_mode: "host"
     ports:
-      - "32401:32400/tcp"
+      - "32400:32400/tcp"
     volumes:
       - ${CONFIG}/plex:/config
       - ${MEDIA}/TV:/media/tv
       - ${MEDIA}/Movies:/media/movies
-      - ${MEDIA}/Music:/media/music
-      - ${MEDIA}/Audiobooks:/media/audiobooks
-      - ${MEDIA}/YouTube:/media/youtube
-      - ${CACHE}:/transcode
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PGID
@@ -85,53 +73,15 @@ services:
       - VERSION=latest
     restart: always
 
-  jellyfin:
-    image: lscr.io/linuxserver/jellyfin
-    container_name: jellyfin
-    hostname: jellyfin
-    #network_mode: "host"
-    ports:
-      - 33010:8096
-    volumes:
-      - ${CONFIG}/jelly:/config
-      - ${MEDIA}/TV:/media/tv
-      - ${MEDIA}/Movies:/media/movies
-      - ${MEDIA}/Music:/media/music
-      - ${MEDIA}/Audiobooks:/media/audiobooks
-      - ${MEDIA}/YouTube:/media/youtube
-      - ${CACHE}:/cache
-      - /etc/localtime:/etc/localtime:ro
+  overseerr:
+    image: lscr.io/linuxserver/overseerr
+    container_name: overseerr
     environment:
-      - PGID
       - PUID
+      - PGID
       - TZ
-    restart: always
-
-  plexpy:
-    image: ghcr.io/linuxserver/tautulli
-    container_name: tautulli
-    hostname: tautulli
-    ports:
-      - "8181:8181"
     volumes:
-      - ${CONFIG}/plexpy:/config
-      - ${CONFIG}/plex/Library/Application Support/Plex Media Server/Logs:/logs:ro
-    environment:
-      - PGID
-      - PUID
-      - TZ
-    restart: always
-
-  ombi:
-    image: ghcr.io/linuxserver/ombi
-    container_name: ombi
-    hostname: ombi
+      - ${CONFIG}/overseer:/config
     ports:
-      - "27016:3579"
-    volumes:
-      - ${CONFIG}/ombi:/config
-    environment:
-      - PGID
-      - PUID
-      - TZ
-    restart: always
+      - 5055:5055
+    restart: unless-stopped 

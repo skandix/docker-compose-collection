@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  uptime:
+    image: louislam/uptime-kuma
+    container_name: uptime
+    hostname: uptime
+    ports:
+      - "3001:3001"
+    volumes:
+      - ${CONFIG}/uptime:/app/data
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: on-failure
