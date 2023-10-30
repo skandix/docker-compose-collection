@@ -1,0 +1,35 @@
+services:
+  traefikk:
+    image: traefik
+    container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - TZ
+      - CF_API_EMAIL
+      - CF_DNS_API_TOKEN
+    ports:
+      - 80:80
+      - 443:443
+      - 8081:8081
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/conf.d:/etc/conf.d
+      - ./config/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./data/acme.json:/acme.json
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.int.routers.traefik.rule=Host(`dash.example.com`)"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=websecure"
+      - "traefik.int.routers.traefik-secure.rule=Host(`dash.example.com`)"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=example.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.example.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+    restart: always

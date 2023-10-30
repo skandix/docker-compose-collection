@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  linkding:
+    container_name: "linkding"
+    image: sissbruecker/linkding:latest
+    restart: always
+    ports:
+    - "9090:9090"
+    volumes:
+      - "./config:/etc/linkding/data"
+    environment:
+      - LD_SUPERUSER_NAME=redacted
+      - LD_SUPERUSER_PASSWORD=redacted

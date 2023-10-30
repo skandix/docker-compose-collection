@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  calibre:
+    image: linuxserver/calibre-web
+    container_name: calibre
+    hostname: calibre
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./config:/config
+      - ./books:/books
+    environment:
+    - PGID
+    - PUID
+    - TZ
+    restart: on-failure

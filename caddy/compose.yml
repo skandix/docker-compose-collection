@@ -1,0 +1,13 @@
+version: '3'
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    hostname: caddy
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/Caddyfile:/etc/caddy/Caddyfile
+      - ./config/data:/data # Optional
+      - ./config/config:/config # Optional

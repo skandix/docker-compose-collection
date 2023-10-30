@@ -1,0 +1,11 @@
+version: "3"
+services:
+  openbooks:
+    image: evanbuss/openbooks
+    container_name: openbooks
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+    volumes:
+      - ./ebooks:/books
+    command: --persist

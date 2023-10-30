@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    hostname: db
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "linkwarden", "-U", "linkwardenuser"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - ./config/db:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: linkwarden
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: hackme
+    restart: on-failure:5
+
+  linkwarden:
+    image: ghcr.io/linkwarden/linkwarden:main
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config/data:/data/data:rw
+    environment:
+      DATABASE_URL: postgres://user:hackme@db:5432/linkwarden
+      NEXTAUTH_SECRET: hackme
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_DISABLE_REGISTRATION: false #or true
+    restart: on-failure:5
+    depends_on:
+      db:
+        condition: service_healthy

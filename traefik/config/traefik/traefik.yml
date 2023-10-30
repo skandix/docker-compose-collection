@@ -1,0 +1,42 @@
+# API
+api:
+  dashboard: true
+  insecure: false
+  debug: true
+
+# EntryPoints
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: :443
+  int:
+    address: :8888
+
+serversTransport:
+  insecureSkipVerify: true
+
+# Providers
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    watch: true
+  file:
+    filename: /etc/conf.d/config.yml
+
+certificatesResolvers:
+ cloudflare:
+   acme:
+     email: redacted
+     storage: acme.json
+     dnsChallenge:
+       provider: cloudflare
+       resolvers:
+         - "1.1.1.1:53"
+         - "1.0.0.1:53"

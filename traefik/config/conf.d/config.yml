@@ -1,0 +1,80 @@
+# routers
+http:
+  routers:
+    overseer:
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: overseer
+      rule: "Host(`a.example.com`)"
+    miniflux:
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: miniflux
+      rule: "Host(`b.example.com`)"
+    linkding:
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: linkding
+      rule: "Host(`c.example.com`)"
+    zipline:
+      entryPoints:
+        - "websecure"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: zipline
+      rule: "Host(`d.example.com`)"
+
+  services:
+    overseer:
+      loadBalancer:
+        servers:
+          - url: "http://x.x.x.x:1234"
+        passHostHeader: true
+    miniflux:
+      loadBalancer:
+        servers:
+          - url: "http://x.x.x.x:1234"
+        passHostHeader: true
+    linkding:
+      loadBalancer:
+        servers:
+          - url: "http://x.x.x.x:1234"
+        passHostHeader: true
+    zipline:
+      loadBalancer:
+        servers:
+          - url: "http://x.x.x.x:1234"
+        passHostHeader: true
+
+  middlewares:
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https

@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  ha:
+    image: linuxserver/homeassistant
+    container_name: homeassistant
+    network_mode: host
+    restart: always
+    environment:
+      - TZ=Europe/Oslo
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./config/homeassistant:/config
+    # devices:
+    #   - /dev/ttyACM0
+
+  deconz:
+    image: deconzcommunity/deconz
+    container_name: deconz
+    restart: always
+    ports:
+      - 8880:8880
+      - 8443:8443
+      - 6080:6080
+    volumes:
+      - ./config/deconz:/opt/deCONZ
+    devices:
+      - /dev/ttyACM0
+    environment:
+      - TZ=Europe/Oslo
+      - DECONZ_WEB_PORT=8880
+      - DECONZ_WS_PORT=8443
+      - DEBUG_INFO=1
+      - DEBUG_APS=0
+      - DEBUG_ZCL=0
+      - DEBUG_ZDP=0
+      - DEBUG_OTAU=0
+      - DEBUG_HTTP=0
+      - DECONZ_DEVICE=/dev/ttyACM0
+      - DECONZ_VNC_MODE=1
+      - DECONZ_VNC_PORT=5900
+      - DECONZ_VNC_PASSWORD=redacted
+      - DECONZ_UID=1000
+      - DECONZ_GID=1000
+      - DECONZ_START_VERBOSE=0

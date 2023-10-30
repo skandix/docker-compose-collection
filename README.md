@@ -1,13 +1,5 @@
 # docker-compose-collection
-My colletion of docker-compose files i've made myself and that HOPEFULLY doesnt contain any senseitive information... :joy:
-
-# Overview
-* [Code](./code/)
-* [Games](./games/)
-* [Media](./media/)
-* [Mgmt](./mgmt/)
-* [Misc](./misc/)
-* [Iot](./iot/)
+My colletion of docker-compose files and that HOPEFULLY doesnt contain any senseitive information... :joy:
 
 # Install
 There is already great guides out there on how to install both Docker and Docker-compose :)

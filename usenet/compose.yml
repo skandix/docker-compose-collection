@@ -1,0 +1,125 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    hostname: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    command: --interval 720 --cleanup --rolling-restart
+    restart: on-failure
+
+  nzbget:
+    image: ghcr.io/linuxserver/nzbget
+    container_name: nzbget
+    hostname: nzbget
+    ports:
+      - "6789:6789"
+    volumes:
+      - ${CONFIG}/nzbget:/config
+      - ${DOWNLOAD}:/downloads/
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
+
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr:4.0.0-develop
+    container_name: sonarr
+    hostname: sonarr
+    ports:
+      - "8989:8989"
+    volumes:
+      - ${CONFIG}/sonarr:/config
+      - ${DOWNLOAD}:/downloads
+      - ${MEDIA}/TV:/tv
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
+
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr
+    container_name: prowlarr
+    hostname: prowlarr
+    ports:
+      - "9696:9696"
+    volumes:
+      - ${CONFIG}/prowlarr:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
+
+  radarr:
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    hostname: radarr
+    ports:
+      - "7878:7878"
+    volumes:
+      - ${CONFIG}/radarr:/config
+      - ${DOWNLOAD}:/downloads
+      - ${MEDIA}/Movies:/movies
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
+
+  plex:
+    image: ghcr.io/linuxserver/plex
+    container_name: plex
+    hostname: plex
+    network_mode: host
+    #ports:
+      #- "32400:32400/tcp"
+    volumes:
+      - ${CONFIG}/plex:/config
+      - ${MEDIA}/TV:/media/tv
+      - ${MEDIA}/Movies:/media/movies
+      - ${MEDIA}:/media_root
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/plex:/transcode
+    environment:
+      - PGID
+      - PUID
+      - TZ
+      - VERSION=latest
+    restart: always
+
+  overseerr:
+    image: lscr.io/linuxserver/overseerr
+    container_name: overseerr
+    hostname: overseerr
+    environment:
+      - PUID
+      - PGID
+      - TZ
+    volumes:
+      - ${CONFIG}/overseer:/config
+    ports:
+     - 5055:5055
+    restart: always
+
+  tautulli:
+    image: ghcr.io/linuxserver/tautulli
+    container_name: tautulli
+    hostname: tautulli
+    ports:
+      - "8181:8181"
+    volumes:
+      - ${CONFIG}/tautulli:/config
+    environment:
+      - PGID
+      - PUID
+      - TZ
+    restart: always
